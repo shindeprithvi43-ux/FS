@@ -19,9 +19,9 @@ const ensureAdminUser = require('./utils/bootstrapAdmin');
 const app = express();
 
 // Determine allowed origins dynamically
-const allowedOrigins = process.env.CLIENT_URL 
+const allowedOrigins = process.env.CLIENT_URL
   ? process.env.CLIENT_URL.split(',')
-  : ['http://localhost:5173', 'http://localhost:5174', 'https://fs-snowy.vercel.app'];
+  : ['http://localhost:5173', 'http://localhost:5174', 'https://fs-shindeprithvi43-uxs-projects.vercel.app/login'];
 
 app.use(cors({
   origin: function (origin, callback) {
@@ -51,8 +51,8 @@ app.use('/api/matches', matchRoutes);
 
 // Health check
 app.get('/api/health', (req, res) => {
-  res.json({ 
-    status: 'OK', 
+  res.json({
+    status: 'OK',
     message: 'Krishna Cricket Academy API is running',
     timestamp: new Date().toISOString()
   });
@@ -61,15 +61,15 @@ app.get('/api/health', (req, res) => {
 // Error handling middleware
 app.use((err, req, res, next) => {
   console.error('Server Error:', err.stack);
-  
+
   if (err.name === 'MulterError') {
     if (err.code === 'LIMIT_FILE_SIZE') {
       return res.status(400).json({ message: 'File too large. Maximum size is 5MB.' });
     }
     return res.status(400).json({ message: err.message });
   }
-  
-  res.status(500).json({ 
+
+  res.status(500).json({
     message: 'Internal server error',
     error: process.env.NODE_ENV === 'development' ? err.message : undefined
   });
