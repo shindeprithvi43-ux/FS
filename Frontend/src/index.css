@@ -1,0 +1,70 @@
+@import "tailwindcss";
+
+@theme {
+  --color-primary: #1c3678;
+  --color-accent: #D3A933;
+  --color-background-light: #f6f6f8;
+  --color-background-dark: #13161f;
+  --color-neutral-dark: #1c2230;
+  --color-border-dark: #394460;
+  --color-card-dark: #1c212e;
+
+  --font-display: "Lexend", sans-serif;
+  --font-body: "Montserrat", sans-serif;
+  --font-stats: "Oswald", sans-serif;
+}
+
+body {
+  font-family: var(--font-body);
+  margin: 0;
+}
+
+h1, h2, h3, .font-display {
+  font-family: var(--font-display);
+}
+
+.font-oswald, .stat-value {
+  font-family: var(--font-stats);
+}
+
+/* Custom scrollbar for dark theme */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: var(--color-background-dark);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--color-border-dark);
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-primary);
+}
+
+/* Dashboard custom scrollbar */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 4px;
+}
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: #1b3a5c;
+  border-radius: 4px;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #10b981;
+}
+
+/* Smooth scrolling */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Toast customization */
+.Toastify__toast-theme--dark {
+  background: #0d1b2a !important;
+  border: 1px solid #1b3a5c !important;
+  border-radius: 12px !important;
+}

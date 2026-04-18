@@ -1,0 +1,4 @@
+node_modules
+.env
+images/registration/*
+!images/registration/.gitkeep
