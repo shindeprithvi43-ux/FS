@@ -21,7 +21,7 @@ const app = express();
 // Determine allowed origins dynamically
 const allowedOrigins = process.env.CLIENT_URL
   ? process.env.CLIENT_URL.split(',')
-  : ['http://localhost:5173', 'http://localhost:5174', 'https://fs-shindeprithvi43-uxs-projects.vercel.app'];
+  : ['http://localhost:5173', 'http://localhost:5174', 'https://fs-snowy.vercel.app'];
 
 app.use(cors({
   origin: function (origin, callback) {
