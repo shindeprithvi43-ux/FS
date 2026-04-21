@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { ToastContainer, toast } from 'react-toastify';
@@ -9,8 +9,16 @@ function LoginPage() {
   const [loginId, setLoginId] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
-  const { login } = useAuth();
+  const { login, user, isAuthenticated, loading: authLoading } = useAuth();
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (authLoading || !isAuthenticated || !user?.role) {
+      return;
+    }
+
+    navigate(user.role === 'admin' ? '/admin/dashboard' : '/user/dashboard', { replace: true });
+  }, [authLoading, isAuthenticated, navigate, user]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -30,7 +38,7 @@ function LoginPage() {
     }
 
     toast.success('Login successful');
-    setTimeout(() => navigate(result.data.user.role === 'admin' ? '/admin/dashboard' : '/user/dashboard'), 300);
+    navigate(result.redirectTo, { replace: true });
   };
 
   return (

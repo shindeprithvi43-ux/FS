@@ -31,6 +31,7 @@ export const AuthProvider = ({ children }) => {
     try {
       const { data } = await API.post('/auth/login', { loginId, password });
       const { token: newToken, ...userData } = data.user;
+      const redirectTo = userData.role === 'admin' ? '/admin/dashboard' : '/user/dashboard';
       
       localStorage.setItem('kca_token', newToken);
       localStorage.setItem('kca_user', JSON.stringify(userData));
@@ -38,8 +39,16 @@ export const AuthProvider = ({ children }) => {
       setToken(newToken);
       setUser(userData);
       
-      return { success: true, data };
+      return { success: true, data, redirectTo };
     } catch (error) {
+      // Axios network errors (e.g. ERR_CONNECTION_REFUSED) do not include response data
+      if (!error.response) {
+        return {
+          success: false,
+          message: 'Cannot reach backend at http://localhost:5000. Start backend server and ensure MongoDB is connected.'
+        };
+      }
+
       return { 
         success: false, 
         message: error.response?.data?.message || 'Login failed. Please try again.' 
@@ -83,4 +92,3 @@ export const AuthProvider = ({ children }) => {
 };
 
 export default AuthContext;
-
