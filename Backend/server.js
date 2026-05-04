@@ -18,14 +18,27 @@ const ensureAdminUser = require('./utils/bootstrapAdmin');
 
 const app = express();
 
-// Determine allowed origins dynamically
-const allowedOrigins = process.env.CLIENT_URL
-  ? process.env.CLIENT_URL.split(',')
-  : ['http://localhost:5173', 'http://localhost:5174', 'https://fs-snowy.vercel.app'];
+// Determine allowed origins dynamically and normalize trailing slashes
+const defaultAllowedOrigins = [
+  'http://localhost:5173',
+  'http://localhost:5174',
+  'https://fs-snowy.vercel.app',
+  'https://kcacademy.in',
+  'https://www.kcacademy.in'
+];
+
+const envAllowedOrigins = (process.env.CLIENT_URL || '')
+  .split(',')
+  .map((entry) => entry.trim())
+  .filter(Boolean);
+
+const normalizeOrigin = (value) => value.replace(/\/+$/, '');
+const allowedOrigins = [...new Set([...defaultAllowedOrigins, ...envAllowedOrigins].map(normalizeOrigin))];
 
 app.use(cors({
   origin: function (origin, callback) {
-    if (!origin || allowedOrigins.includes(origin) || allowedOrigins.includes('*')) {
+    const normalizedOrigin = origin ? normalizeOrigin(origin) : origin;
+    if (!normalizedOrigin || allowedOrigins.includes(normalizedOrigin) || allowedOrigins.includes('*')) {
       callback(null, true);
     } else {
       callback(new Error('Not allowed by CORS'));
